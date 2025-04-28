@@ -31,7 +31,7 @@ namespace BoufOS
                     Cosmos.System.Power.Reboot();
                     break;
                 case "info":
-                    Console.WriteLine("BoufOS 0.2");
+                    Console.WriteLine("BoufOS 0.1");
                     break;
                 case "fileman":
                     if (root)
