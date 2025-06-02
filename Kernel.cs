@@ -1,4 +1,6 @@
-﻿using IL2CPU.API.Attribs;
+﻿using BoufOS.Programs;
+using BoufOS.SystemPrograms;
+using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -13,7 +15,10 @@ namespace BoufOS
         static byte[] file;
 
         List<string> commands = new List<string>
-            {"shutdown","reboot","info","fileman","clear","time","ram","help","add","sub","mult","div","mod","print-file","root","exit","check-root"};
+            {"shutdown","reboot","info","fileman","clear","time","ram","help","add","sub","mult","div","mod","root","exit","check-root","games"};
+
+        List<string> games = new List<string>
+            {"guess the number - gtn"};
 
         bool root = false;
         string password = "boufOS";
@@ -29,9 +34,6 @@ namespace BoufOS
                     break;
                 case "reboot":
                     Cosmos.System.Power.Reboot();
-                    break;
-                case "info":
-                    Console.WriteLine("BoufOS 0.1");
                     break;
                 case "fileman":
                     if (root)
@@ -61,7 +63,15 @@ namespace BoufOS
                     }
                     Console.WriteLine("");
                     break;
-                case "print-file":
+                case "?":
+                    Console.WriteLine("Commands:");
+                    foreach (string cmd in commands)
+                    {
+                        Console.WriteLine("  " + cmd);
+                    }
+                    Console.WriteLine("");
+                    break;
+                case "info":
                     string fileContent = System.Text.Encoding.UTF8.GetString(file); //convert the byte array to string (assuming text data)
                     Console.WriteLine(fileContent); //write it out
                     break;
@@ -178,9 +188,28 @@ namespace BoufOS
                         Console.WriteLine("Correct syntax: mod <num1> <num2>");
                     }
                     break;
+                case "games":
+                    Console.WriteLine("Games:");
+                    foreach (string game in games)
+                    {
+                        Console.WriteLine("  " + game);
+                    }
+                    Console.WriteLine("");
+                    break;
+
+                case "gtn":
+                    try
+                    {
+                        GuessTheNumber.Run();
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Game crashed!\nYou may entered incorrect values");
+                    }
+                    break;
 
                 default:
-                    Console.WriteLine("Command not found");
+                    Print.Error("Command not found!");
                     break;
             }
         }
@@ -204,7 +233,7 @@ namespace BoufOS
             }
             catch
             {
-                Console.WriteLine("Something went wrong while executing the command");
+                Print.Error("Something went wrong while executing the command");
             }
             Console.WriteLine();
         }
